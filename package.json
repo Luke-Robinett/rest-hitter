@@ -1,0 +1,22 @@
+{
+  "name": "rest-hitter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Luke-Robinett/rest-hitter.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Luke-Robinett/rest-hitter/issues"
+  },
+  "homepage": "https://github.com/Luke-Robinett/rest-hitter#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
