@@ -32,6 +32,10 @@
                         <label for="endpoint">Endpoint</label><br>
                         <input id="endpoint" type="url" required>
                     </p>
+                    <p id="body-p" class="d-none">
+                        <label for="request-body">Body</label><br>
+                        <textarea id="request-body" rows="20" cols="40" placeholder="JSON data here"></textarea>
+                    </p>
                     <p>
                         <input id="use-auth" type="checkbox"><label for="use-auth">Use Authentication</label><br>
                         <label for="username">Username</label><br>
@@ -46,6 +50,7 @@
             </aside>
             <main class="col">
                 <h2>Response</h2>
+                <textarea id="output" rows="20" cols="80" readonly placeholder="Fill out the options on the left and click Submit. Your results will appear here in JSON format"></textarea>
             </main>
         </div>
     </div>

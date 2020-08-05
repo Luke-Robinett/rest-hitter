@@ -5,7 +5,9 @@ $(document).ready(function () {
     });
 
     $("#method").on("change", function () {
-        // For future development
+        ($(this).val() === "GET")
+            ? $("#body-p").addClass("d-none")
+            : $("#body-p").removeClass("d-none");
     });
 
     $("form").on("submit", function (event) {
@@ -14,11 +16,12 @@ $(document).ready(function () {
         const method = $("#method").val();
         const endpoint = $("#endpoint").val().trim();
         const useAuth = $("#use-auth").prop("checked");
+        const requestBody = $("#request-body").val().trim();
+        const hasBody = (requestBody.length > 0);
 
-        $.ajax({
+        let ajaxParams = {
             type: method,
             url: encodeURI(endpoint),
-            // crossDomain: true,
             beforeSend: function (xhr) {
                 if (useAuth) {
                     const username = $("#username").val().trim();
@@ -27,14 +30,19 @@ $(document).ready(function () {
                     xhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
                 }
             }
-        })
+        };
+
+        if (method === "POST" && hasBody)
+            ajaxParams.data = JSON.parse(requestBody);
+
+        $.ajax(ajaxParams)
             .then(response => {
                 console.log(response);
-                alert("Request successful!");
+                $("#output").val(JSON.stringify(response, null, "\t"));
             })
             .catch(error => {
                 console.error(error);
-                alert("Failure!");
+                $("#output").val(JSON.stringify(error, null, "\t"));
             });
     });
 });
