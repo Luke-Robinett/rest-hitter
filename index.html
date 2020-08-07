@@ -16,9 +16,9 @@
         <hr>
     </header>
 
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <aside class="col col-lg-3 pl-4 pb-5 bg-muted">
+            <aside class="col col-lg-2 px-2 pb-5 text-light bg-info">
                 <form>
                     <h2>Settings</h2>
                     <p>
@@ -37,21 +37,27 @@
                         <textarea id="request-body" rows="20" cols="40" placeholder="JSON data here"></textarea>
                     </p>
                     <p>
-                        <input id="use-auth" type="checkbox"><label for="use-auth">Use Authentication</label><br>
+                        <input id="use-auth" type="checkbox">&nbsp; <label for="use-auth">Use Authentication</label>
+                    </p>
+                    <p id="credentials" class="d-none">
                         <label for="username">Username</label><br>
-                        <input id="username" disabled required><br>
+                        <input id="username" class="auth"><br>
                         <label for="password">Password</label><br>
-                        <input id="password" disabled required type="password">
+                        <input id="password" type="password" class="auth">
                     </p>
                     <p>
                         <input type="submit" class="btn btn-primary">
                     </p>
                 </form>
             </aside>
-            <main class="col px-5 pb-5">
+            <main class="col px-5 pb-5 bg-muted">
                 <h2>Response</h2>
                 <textarea id="output" class="w-100" rows="15"></textarea>
             </main>
+            <aside class="col col-lg-3 px-2 pb-5 text-light bg-info">
+                <h2>History</h2>
+                <div id="history"></div>
+            </aside>
         </div>
     </div>
 

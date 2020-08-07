@@ -1,7 +1,7 @@
 $(document).ready(function () {
     $("#use-auth").on("change", function () {
-        $("#username").prop("disabled", !$(this).prop("checked"));
-        $("#password").prop("disabled", !$(this).prop("checked"));
+        $("#credentials").toggleClass("d-none");
+        $(".auth").prop("required", $(this).prop("checked"));
     });
 
     $("#method").on("change", function () {
