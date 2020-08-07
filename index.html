@@ -18,8 +18,8 @@
 
     <div class="container-fluid">
         <div class="row">
-            <aside class="col col-lg-2 px-2 pb-5 text-light bg-info">
-                <form>
+            <aside class="col col-lg-2 px-4 pb-5 text-light bg-info">
+                <form autocomplete="on">
                     <h2>Settings</h2>
                     <p>
                         <label for="method">Method</label><br>
@@ -30,20 +30,27 @@
                     </p>
                     <p>
                         <label for="endpoint">Endpoint</label><br>
-                        <input id="endpoint" type="url" required>
+                        <input id="endpoint" type="url" class="w-100" required>
                     </p>
                     <p id="body-p" class="d-none">
                         <label for="request-body">Body</label><br>
-                        <textarea id="request-body" rows="20" cols="40" placeholder="JSON data here"></textarea>
+                        <textarea id="request-body" class="w-100" rows="6" placeholder="JSON data here"></textarea>
                     </p>
                     <p>
                         <input id="use-auth" type="checkbox">&nbsp; <label for="use-auth">Use Authentication</label>
                     </p>
                     <p id="credentials" class="d-none">
                         <label for="username">Username</label><br>
-                        <input id="username" class="auth"><br>
+                        <input id="username" class="auth w-75"><br>
                         <label for="password">Password</label><br>
-                        <input id="password" type="password" class="auth">
+                        <input id="password" type="password" class="auth w-75">
+                    </p>
+                    <p>
+                        <input id="save" type="checkbox">&nbsp; <label for="save">Save Session</label>
+                    </p>
+                    <p id="session-p" class="d-none">
+                        <label for="session-name">Session Name</label><br>
+                        <input id="session-name" class="d-75">
                     </p>
                     <p>
                         <input type="submit" class="btn btn-primary">
@@ -56,7 +63,7 @@
             </main>
             <aside class="col col-lg-3 px-2 pb-5 text-light bg-info">
                 <h2>History</h2>
-                <div id="history"></div>
+                <ul id="history" class="list-group"></div>
             </aside>
         </div>
     </div>
