@@ -19,8 +19,11 @@
     <div class="container-fluid">
         <div class="row">
             <aside class="col col-lg-2 px-4 pb-5 text-light bg-info">
-                <form autocomplete="on">
-                    <h2>Settings</h2>
+                <h2>Settings</h2>
+                <form>
+                    <p>
+                        <input id="session-name" class="w-100" placeholder="Session Name" required>
+                    </p>
                     <p>
                         <label for="method">Method</label><br>
                         <select id="method">
@@ -30,27 +33,36 @@
                     </p>
                     <p>
                         <label for="endpoint">Endpoint</label><br>
-                        <input id="endpoint" type="url" class="w-100" required>
-                    </p>
-                    <p id="body-p" class="d-none">
-                        <label for="request-body">Body</label><br>
-                        <textarea id="request-body" class="w-100" rows="6" placeholder="JSON data here"></textarea>
+                        <input id="endpoint" type="url" class="w-100" required placeholder="Endpoint URL">
                     </p>
                     <p>
-                        <input id="use-auth" type="checkbox">&nbsp; <label for="use-auth">Use Authentication</label>
-                    </p>
-                    <p id="credentials" class="d-none">
-                        <label for="username">Username</label><br>
-                        <input id="username" class="auth w-75"><br>
-                        <label for="password">Password</label><br>
-                        <input id="password" type="password" class="auth w-75">
+                        <details>
+                            <summary>Query Parameters</summary>
+                            <div>
+                                Under development
+                            </div>
+                        </details>
                     </p>
                     <p>
-                        <input id="save" type="checkbox">&nbsp; <label for="save">Save Session</label>
+                        <details>
+                            <summary>Data</summary>
+                            <div>
+                                <label for="request-body">Body</label><br>
+                                <textarea id="request-body" class="w-100" rows="6"
+                                    placeholder="Enter JSON data"></textarea>
+                            </div>
+                        </details>
                     </p>
-                    <p id="session-p" class="d-none">
-                        <label for="session-name">Session Name</label><br>
-                        <input id="session-name" class="d-75">
+                    <p>
+                        <details>
+                            <summary>Authentication</summary>
+                            <div>
+                                <label for="username">Username</label><br>
+                                <input id="username" class="w-75"><br>
+                                <label for="password">Password</label><br>
+                                <input id="password" type="password" class="w-75">
+                            </div>
+                        </details>
                     </p>
                     <p>
                         <input type="submit" class="btn btn-primary"> &nbsp;
@@ -60,11 +72,13 @@
             </aside>
             <main class="col px-5 pb-5 bg-muted">
                 <h2>Response</h2>
-                <textarea id="output" class="w-100" rows="15"></textarea>
+                <textarea id="output" class="w-100" rows="15" placeholder="API Response"></textarea>
             </main>
             <aside class="col col-lg-3 px-2 pb-5 text-light bg-info">
                 <h2>History</h2>
-                <ul id="history" class="list-group"></ul>
+                <p>
+                    <ul id="history" class="list-group"></ul>
+                </p>
                 <p>
                     <a href="#" id="clear-history">Clear</a>
                 </p>

@@ -1,9 +1,7 @@
 $(document).ready(function () {
-    updateHistory(getSavedSessions());
-    $("#method").focus();
+    updateHistory();
+    resetForm();
 
-    $("#use-auth").on("change", useAuthOnChange);
-    $("#method").on("change", methodOnChange);
     $("form").on("submit", function (event) {
         event.preventDefault();
         formOnSubmit();
@@ -12,7 +10,6 @@ $(document).ready(function () {
         event.preventDefault();
         resetForm();
     });
-    $("#save").on("change", saveOnChange);
     $(".history-link").click(function (event) {
         event.preventDefault();
         historyLinkOnClick(event.target);
@@ -32,14 +29,15 @@ $(document).ready(function () {
     function getSavedSessions() {
         const savedSessions = localStorage.getItem("savedSessions");
 
-        if (savedSessions == null) return [];
-        return JSON.parse(localStorage.getItem("savedSessions"));
+        return savedSessions
+            ? JSON.parse(savedSessions)
+            : [];
     }
 
-    function updateHistory(savedSessions) {
+    function updateHistory() {
         $("#clear-history").addClass("d-none");
 
-        if (!Array.isArray(savedSessions)) return;
+        const savedSessions = getSavedSessions();
 
         if (savedSessions.length > 0) {
             $("#clear-history").removeClass("d-none");
@@ -60,48 +58,33 @@ $(document).ready(function () {
         });
     }
 
-    function useAuthOnChange() {
-        $("#use-auth").prop("checked")
-            ? $("#credentials").removeClass("d-none")
-            : $("#credentials").addClass("d-none");
-
-        $(".auth").prop("required", $("#use-auth").prop("checked"));
-    }
-
-    function methodOnChange() {
-        ($("#method").val() === "GET")
-            ? $("#body-p").addClass("d-none")
-            : $("#body-p").removeClass("d-none");
-    }
-
     function formOnSubmit() {
         // Gather form data
         const formData = getFormData();
 
         // Extract fields needed for this method
-        const { method, endpoint, body, useAuth, username, password, save } = formData;
+        const { method, endpoint, body, username, password } = formData;
 
         // Configure the API request
         let ajaxParams = {
             type: method,
             url: encodeURI(endpoint),
             beforeSend: function (xhr) {
-                if (useAuth) {
+                if ((username.length > 0) && (password.length > 0)) {
                     xhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
                 }
             }
         };
 
-        if (method === "POST" && body.lenth > 0)
+        if (body.lenth > 0) {
             ajaxParams.data = JSON.parse(body);
-
-        if (save) {
-            // Save user's session
-            saveSession(formData);
-
-            // Update the history list
-            updateHistory(getSavedSessions());
         }
+
+        // Save user's session
+        saveSession(formData);
+
+        // Update the history list
+        updateHistory();
 
         // Make the API call
         $.ajax(ajaxParams)
@@ -112,21 +95,40 @@ $(document).ready(function () {
             .catch(error => {
                 console.error(error);
                 $("#output").val(JSON.stringify(error, null, "\t"));
-            })
-            .always($("#output").focus());
+            });
     }
 
     function getFormData() {
         return {
+            name: $("#session-name").val().trim(),
             method: $("#method").val(),
             endpoint: $("#endpoint").val().trim(),
             body: $("#request-body").val().trim(),
-            useAuth: $("#use-auth").prop("checked"),
-            username: $("#username").val(),
-            password: $("#password").val(),
-            save: $("#save").prop("checked"),
-            name: $("#session-name").val().trim()
+            username: $("#username").val().trim(),
+            password: $("#password").val().trim()
         };
+    }
+
+    function setFormData(formData) {
+        const {
+            name = generateSessionName(),
+            method = "GET",
+            endpoint = "",
+            body = "",
+            username = "",
+            password = ""
+        } = formData;
+
+        $(document).attr("title", `${name} | Rest Hitter`);
+        $("#session-name").val(name);
+        $("#method").val(method);
+        $("#endpoint").val(endpoint);
+        $("#request-body").val(body);
+        $("#username").val(username);
+        $("#password").val(password);
+        $("#output").val("");
+
+        $("#session-name").focus();
     }
 
     function saveSession(formData) {
@@ -144,7 +146,7 @@ $(document).ready(function () {
                 id: savedSessions[existingSessionIndex].id,
                 ...formData
             };
-            if (!confirm(`A saved session called "${formData.name}" already exists. Choose OK to replace it or Cancel to cancel the save operation.`)) {
+            if (!confirm(`A saved session called "${formData.name}" already exists. Replace it?`)) {
                 return;
             }
             savedSessions[existingSessionIndex] = savedSession;
@@ -162,14 +164,6 @@ $(document).ready(function () {
         localStorage.setItem("savedSessions", JSON.stringify(savedSessions));
     }
 
-    function saveOnChange() {
-        $("#save").prop("checked")
-            ? $("#session-p").removeClass("d-none")
-            : $("#session-p").addClass("d-none");
-
-        $("#session-name").prop("required", $("#save").prop("checked"));
-    }
-
     function historyLinkOnClick(clickedLink) {
         // Get the unique ID of the clicked link
         const id = $(clickedLink).prop("data-id");
@@ -181,20 +175,7 @@ $(document).ready(function () {
         if (!session) return;
 
         // Populate the form with values from the saved session
-        $("#method").val(session.method);
-        $("#request-body").val(session.body);
-        $("#endpoint").val(session.endpoint);
-        $("#use-auth").prop("checked", session.useAuth);
-        $("#username").val(session.username);
-        $("#password").val(session.password);
-        $("#save").prop("checked", false);
-        $("#session-name").val("");
-        $("#output").val("");
-
-        // Update UI based on form entries
-        updateUI();
-
-        $("#method").focus();
+        setFormData(session);
     }
 
     function generateNewID() {
@@ -202,36 +183,22 @@ $(document).ready(function () {
         if (getSavedSessions().length === 0) return 1;
 
         // Otherwise returns a new ID that is 1 greater than the highest existing ID
-        return getSavedSessions.map(session => session.id)
-            .sort((id1, id2) => id2 - id1)[0];
+        return getSavedSessions().map(session => session.id)
+            .sort((id1, id2) => id2 - id1)[0] + 1;
+    }
+
+    function generateSessionName() {
+        return `Untitled Session ${getSavedSessions().filter(session => /^untitled session \d*$/i.test(session.name)).length + 1}`;
     }
 
     function resetForm() {
-        $("#method").val("GET");
-        $("#endpoint").val("");
-        $("#request-body").val("");
-        $("#use-auth").prop("checked", false);
-        $("#username").val("");
-        $("#password").val("");
-        $("#save").prop("checked", false);
-        $("#session-name").val("");
-        $("#output").val("");
-
-        updateUI();
-
-        $("#method").focus();
-    }
-
-    function updateUI() {
-        methodOnChange();
-        useAuthOnChange();
-        saveOnChange();
+        setFormData({ name: generateSessionName() });
     }
 
     function clearHistory() {
         if (confirm("Clear all saved sessions?")) {
             localStorage.removeItem("savedSessions");
-            updateHistory(getSavedSessions());
+            updateHistory();
         }
     }
 });
