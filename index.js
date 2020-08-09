@@ -15,7 +15,11 @@ $(document).ready(function () {
     $("#save").on("change", saveOnChange);
     $(".history-link").click(function (event) {
         event.preventDefault();
-        historyLinkOnClick(this);
+        historyLinkOnClick(event.target);
+    });
+    $("#clear-history").click(function (event) {
+        event.preventDefault();
+        clearHistory();
     });
 
     function getSessionFromHistory(id) {
@@ -33,7 +37,13 @@ $(document).ready(function () {
     }
 
     function updateHistory(savedSessions) {
+        $("#clear-history").addClass("d-none");
+
         if (!Array.isArray(savedSessions)) return;
+
+        if (savedSessions.length > 0) {
+            $("#clear-history").removeClass("d-none");
+        }
 
         const historyList = $("#history");
         historyList.empty();
@@ -216,5 +226,12 @@ $(document).ready(function () {
         methodOnChange();
         useAuthOnChange();
         saveOnChange();
+    }
+
+    function clearHistory() {
+        if (confirm("Clear all saved sessions?")) {
+            localStorage.removeItem("savedSessions");
+            updateHistory(getSavedSessions());
+        }
     }
 });
