@@ -36,36 +36,35 @@
                         <input id="endpoint" type="url" class="w-100" required placeholder="Endpoint URL">
                     </p>
                     <p>
-                        <details>
-                            <summary>Query Parameters</summary>
-                            <div>
-                                Under development
-                            </div>
-                        </details>
+                    <details>
+                        <summary>Query Parameters</summary>
+                        <div>
+                            Under development
+                        </div>
+                    </details>
                     </p>
                     <p>
-                        <details>
-                            <summary>Data</summary>
-                            <div>
-                                <label for="request-body">Body</label><br>
-                                <textarea id="request-body" class="w-100" rows="6"
-                                    placeholder="Enter JSON data"></textarea>
-                            </div>
-                        </details>
+                    <details>
+                        <summary>Data</summary>
+                        <div>
+                            <label for="request-body">Body</label><br>
+                            <textarea id="request-body" class="w-100" rows="6" placeholder="Enter JSON data"></textarea>
+                        </div>
+                    </details>
                     </p>
                     <p>
-                        <details>
-                            <summary>Authentication</summary>
-                            <div>
-                                <label for="username">Username</label><br>
-                                <input id="username" class="w-75"><br>
-                                <label for="password">Password</label><br>
-                                <input id="password" type="password" class="w-75">
-                            </div>
-                        </details>
+                    <details>
+                        <summary>Authentication</summary>
+                        <div>
+                            <label for="username">Username</label><br>
+                            <input id="username" class="w-75"><br>
+                            <label for="password">Password</label><br>
+                            <input id="password" type="password" class="w-75">
+                        </div>
+                    </details>
                     </p>
                     <p>
-                        <input type="submit" class="btn btn-primary"> &nbsp;
+                        <button id="submit" class="btn-primary">Go</button> &nbsp;
                         <button id="reset" class="btn btn-danger">Reset</button>
                     </p>
                 </form>
@@ -77,7 +76,7 @@
             <aside class="col col-lg-3 px-2 pb-5 text-light bg-info">
                 <h2>History</h2>
                 <p>
-                    <ul id="history" class="list-group"></ul>
+                <ul id="history" class="list-group"></ul>
                 </p>
                 <p>
                     <a href="#" id="clear-history">Clear</a>

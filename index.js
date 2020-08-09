@@ -2,19 +2,19 @@ $(document).ready(function () {
     updateHistory();
     resetForm();
 
-    $("form").on("submit", function (event) {
+    $("#submit").on("click", function (event) {
         event.preventDefault();
-        formOnSubmit();
+        submitOnClick();
     });
-    $("#reset").click(function (event) {
+    $("#reset").on("click", function (event) {
         event.preventDefault();
         resetForm();
     });
-    $(".history-link").click(function (event) {
+    $("#history").on("click", ".history-link", function (event) {
         event.preventDefault();
         historyLinkOnClick(event.target);
     });
-    $("#clear-history").click(function (event) {
+    $("#clear-history").on("click", function (event) {
         event.preventDefault();
         clearHistory();
     });
@@ -58,7 +58,7 @@ $(document).ready(function () {
         });
     }
 
-    function formOnSubmit() {
+    function submitOnClick() {
         // Gather form data
         const formData = getFormData();
 
@@ -80,17 +80,14 @@ $(document).ready(function () {
             ajaxParams.data = JSON.parse(body);
         }
 
-        // Save user's session
-        saveSession(formData);
-
-        // Update the history list
-        updateHistory();
-
         // Make the API call
         $.ajax(ajaxParams)
             .then(response => {
                 console.log(response);
                 $("#output").val(JSON.stringify(response, null, "\t"));
+
+                saveSession(formData);
+                updateHistory();
             })
             .catch(error => {
                 console.error(error);
