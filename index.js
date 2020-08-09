@@ -14,6 +14,10 @@ $(document).ready(function () {
         event.preventDefault();
         historyLinkOnClick(event.target);
     });
+    $("#history").on("click", ".fa-remove", function (event) {
+        event.preventDefault();
+        removeIconOnClick(event.target);
+    });
     $("#clear-history").on("click", function (event) {
         event.preventDefault();
         clearHistory();
@@ -43,18 +47,19 @@ $(document).ready(function () {
             $("#clear-history").removeClass("d-none");
         }
 
-        const historyList = $("#history");
-        historyList.empty();
+        $("#history").empty();
 
         savedSessions.forEach(session => {
-            const historyListItem = $("<li>")
-                .addClass("list-group-item");
-            const historyLink = $("<a href='#'>")
-                .addClass("history-link")
-                .prop("data-id", session.id)
-                .text(session.name);
-            historyListItem.append(historyLink);
-            historyList.prepend(historyListItem);
+            $("#history").prepend(
+                $("<div class='row' role='listitem'>").append(
+                    $("<div class='col-10'>").append(
+                        $(`<a href="#" class="history-link" data-id=${session.id}>${session.name}</a>`)
+                    ),
+                    $("<div class='col-2'>").append(
+                        $(`<a href="#" class="fa fa-remove text-danger" data-id=${session.id}><span class="sr-only">Remove ${session.name}</span></a>`)
+                    )
+                )
+            );
         });
     }
 
@@ -160,13 +165,15 @@ $(document).ready(function () {
 
     function historyLinkOnClick(clickedLink) {
         // Get the unique ID of the clicked link
-        const id = $(clickedLink).prop("data-id");
+        const id = parseInt($(clickedLink).attr("data-id"));
 
         // Find session with this ID
         const session = getSessionFromHistory(id);
 
         // If no session was found, exit the function
-        if (!session) return;
+        if (!session) {
+            return;
+        }
 
         // Populate the form with values from the saved session
         setFormData(session);
@@ -194,5 +201,12 @@ $(document).ready(function () {
             localStorage.removeItem("savedSessions");
             updateHistory();
         }
+    }
+
+    function removeIconOnClick(clickedIcon) {
+        const id = parseInt($(clickedIcon).attr("data-id"));
+        const filteredSessions = getSavedSessions().filter(session => session.id !== id);
+        localStorage.setItem("savedSessions", JSON.stringify(filteredSessions));
+        updateHistory();
     }
 });
