@@ -140,15 +140,12 @@ $(document).ready(function () {
         // Search to see if there's already a session with the chosen name
         const existingSessionIndex = savedSessions.findIndex(s => s.name.toLowerCase() === formData.name.toLowerCase());
 
-        // If a session with that name already exists, prompt the user to either replace it or cancel
+        // If a session with that name already exists, save new entries to it
         if (existingSessionIndex >= 0) {
             savedSession = {
                 id: savedSessions[existingSessionIndex].id,
                 ...formData
             };
-            if (!confirm(`A saved session called "${formData.name}" already exists. Replace it?`)) {
-                return;
-            }
             savedSessions[existingSessionIndex] = savedSession;
         } else {
             savedSession = {
