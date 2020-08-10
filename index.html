@@ -15,18 +15,16 @@
 </head>
 
 <body>
-    <header class="jumbotron text-light bg-primary">
-        <h1>Rest Hitter</h1>
-        <hr>
-    </header>
-
     <div class="container-fluid">
+        <header class="pl-4 py-4 text-light bg-primary">
+            <h1>Rest Hitter</h1>
+        </header>
         <div class="row">
-            <aside class="col col-lg-2 px-4 pb-5">
+            <aside class="col-12 col-lg-2 px-4 pb-5">
                 <h2>Settings</h2>
                 <form>
                     <p>
-                        <input id="session-name" class="w-100" placeholder="Session Name" required>
+                        <input id="session-name" class="w-100" maxlength="40" placeholder="Session Name" required>
                     </p>
                     <p>
                         <label for="method">Method</label><br>
@@ -68,20 +66,22 @@
                     </details>
                     </p>
                     <p>
-                        <button id="submit" class="btn-primary">Go</button> &nbsp;
-                        <button id="reset" class="btn btn-danger">Reset</button>
+                        <button id="reset" class="btn-danger" style="width: 5em;">Reset</button> &nbsp;
+                        <button id="submit" class="btn-primary" style="width: 5em;">Go</button>
                     </p>
                 </form>
             </aside>
-            <main class="col px-5 pb-5 bg-muted">
+            <main class="col-12 col px-4 pb-5 bg-muted">
                 <h2>Response</h2>
-                <textarea id="output" class="w-100" rows="15" placeholder="API Response"></textarea>
+                <div class="p-3 justify-content-center w-100">
+                    <textarea id="output" class="w-100" style="height: 10em;" placeholder="API Response"></textarea>
+                </div>
             </main>
-            <aside class="col col-lg-3 px-2 pb-5">
+            <aside class="col-12 col-lg-3 px-4 pb-5">
                 <h2>History</h2>
-                <div id="history" role="list"></div>
+                <div id="history" class="w-100" role="list"></div>
                 <p>
-                    <a href="#" id="clear-history">Clear</a>
+                    <button id="clear-history">Clear History</button>
                 </p>
             </aside>
         </div>

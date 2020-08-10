@@ -52,10 +52,10 @@ $(document).ready(function () {
         savedSessions.forEach(session => {
             $("#history").prepend(
                 $("<div class='row' role='listitem'>").append(
-                    $("<div class='col-10'>").append(
+                    $("<div class='col-6'>").append(
                         $(`<a href="#" class="history-link" data-id=${session.id}>${session.name}</a>`)
                     ),
-                    $("<div class='col-2'>").append(
+                    $("<div class='col-6'>").append(
                         $(`<a href="#" class="fa fa-remove text-danger" data-id=${session.id}><span class="sr-only">Remove ${session.name}</span></a>`)
                     )
                 )
