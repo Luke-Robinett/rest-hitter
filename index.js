@@ -6,10 +6,12 @@ $(document).ready(function () {
         event.preventDefault();
         submitOnClick();
     });
+
     $("#reset").on("click", function (event) {
         event.preventDefault();
         resetForm();
     });
+
     $("#history").on("click", ".history-link", function (event) {
         event.preventDefault();
         historyLinkOnClick(event.target);
@@ -22,6 +24,12 @@ $(document).ready(function () {
         event.preventDefault();
         clearHistory();
     });
+
+    $("#session-name").on("change", event => UpdateTitle($(event.target).val()));
+
+    function UpdateTitle(newTitle) {
+        $(document).attr("title", `${newTitle} | Rest Hitter`);
+    }
 
     function getSessionFromHistory(id) {
         const savedSessions = getSavedSessions();
@@ -105,7 +113,7 @@ $(document).ready(function () {
             name: $("#session-name").val().trim(),
             method: $("#method").val(),
             endpoint: $("#endpoint").val().trim(),
-            body: $("#request-body").val().trim(),
+            body: $("#request-body").val(),
             username: $("#username").val().trim(),
             password: $("#password").val().trim()
         };
@@ -121,7 +129,6 @@ $(document).ready(function () {
             password = ""
         } = formData;
 
-        $(document).attr("title", `${name} | Rest Hitter`);
         $("#session-name").val(name);
         $("#method").val(method);
         $("#endpoint").val(endpoint);
@@ -129,6 +136,8 @@ $(document).ready(function () {
         $("#username").val(username);
         $("#password").val(password);
         $("#output").val("");
+
+        UpdateTitle(name);
 
         $("#session-name").focus();
     }
