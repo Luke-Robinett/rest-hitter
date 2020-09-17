@@ -2,9 +2,14 @@ $(document).ready(function () {
     updateHistory();
     resetForm();
 
-    $("#submit").on("click", function (event) {
+    $("#run").on("click", function (event) {
         event.preventDefault();
-        submitOnClick();
+        submitOnClick(false);
+    });
+
+    $("#run-and-save").on("click", function (event) {
+        event.preventDefault();
+        submitOnClick(true);
     });
 
     $("#reset").on("click", function (event) {
@@ -71,7 +76,7 @@ $(document).ready(function () {
         });
     }
 
-    function submitOnClick() {
+    function submitOnClick(saveFlag) {
         // Gather form data
         const formData = getFormData();
 
@@ -99,8 +104,10 @@ $(document).ready(function () {
                 console.log(response);
                 $("#output").val(JSON.stringify(response, null, "\t"));
 
-                saveSession(formData);
-                updateHistory();
+                if (saveFlag) {
+                    saveSession(formData);
+                    updateHistory();
+                }
             })
             .catch(error => {
                 console.error(error);
