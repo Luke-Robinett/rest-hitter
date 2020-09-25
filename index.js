@@ -103,15 +103,16 @@ $(document).ready(function () {
             .then(response => {
                 console.log(response);
                 $("#output").val(JSON.stringify(response, null, "\t"));
-
-                if (saveFlag) {
-                    saveSession(formData);
-                    updateHistory();
-                }
             })
             .catch(error => {
                 console.error(error);
                 $("#output").val(JSON.stringify(error, null, "\t"));
+            })
+            .always(() => {
+                if (saveFlag) {
+                    saveSession(formData);
+                    updateHistory();
+                }
             });
     }
 
