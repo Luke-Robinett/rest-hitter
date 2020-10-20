@@ -2,14 +2,26 @@ $(document).ready(function () {
 	updateHistory();
 	resetForm();
 
-	$("#run").on("click", function (event) {
+	$("form").on("submit", event => {
 		event.preventDefault();
-		submitOnClick(false);
+		const action = $(event.target).attr("action");
+		const data = $(event.target).serialize();
+		$.post(action, data, "json")
+			.then(response => {
+				$("#output").val(JSON.stringify(response, null, "\t"))
+					.focus()
+					.scrollTop(0);
+				$("#output")[0].setSelectionRange(0, 0);
+			})
+			.catch(error => {
+				console.log(error);
+				alert("Something went wrong. Please check your entries and try again.");
+			});
 	});
 
-	$("#run-and-save").on("click", function (event) {
+	$("#save").on("click", function (event) {
 		event.preventDefault();
-		submitOnClick(true);
+		saveSession(getFormData());
 	});
 
 	$("#reset").on("click", function (event) {
@@ -21,13 +33,19 @@ $(document).ready(function () {
 		event.preventDefault();
 		historyLinkOnClick(event.target);
 	});
+
 	$("#history").on("click", ".fa-remove", function (event) {
 		event.preventDefault();
-		removeIconOnClick(event.target);
+		if (confirm("Remove history item?")) {
+			removeIconOnClick(event.target);
+		}
 	});
+
 	$("#clear-history").on("click", function (event) {
 		event.preventDefault();
-		clearHistory();
+		if (confirm("Clear all history?")) {
+			clearHistory();
+		}
 	});
 
 	$("#session-name").on("change", event => UpdateTitle($(event.target).val()));
@@ -74,29 +92,6 @@ $(document).ready(function () {
 				)
 			);
 		});
-	}
-
-	function submitOnClick(saveFlag) {
-		// Gather form data
-		const formData = getFormData();
-
-		// Send form data to the back end API which will call the endpoint using axios
-		$.post("/api", formData)
-			.then(response => {
-				console.log(response);
-				$("#output").val(JSON.stringify(response, null, "\t"));
-			})
-			.catch(error => {
-				console.log(error);
-				$("#output").val(JSON.stringify(error, null, "\t"));
-				alert("There was an error.");
-			})
-			.always(() => {
-				if (saveFlag) {
-					saveSession(formData);
-					updateHistory();
-				}
-			});
 	}
 
 	function getFormData() {
@@ -175,6 +170,7 @@ $(document).ready(function () {
 
 		// Populate the form with values from the saved session
 		setFormData(session);
+		$("#session-name").focus();
 	}
 
 	function generateNewID() {
@@ -195,10 +191,8 @@ $(document).ready(function () {
 	}
 
 	function clearHistory() {
-		if (confirm("Clear all saved sessions?")) {
-			localStorage.removeItem("savedSessions");
-			updateHistory();
-		}
+		localStorage.removeItem("savedSessions");
+		updateHistory();
 	}
 
 	function removeIconOnClick(clickedIcon) {
