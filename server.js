@@ -42,12 +42,12 @@ app.post("/api", (req, res) => {
     // Make the API call
     axios(axiosParams)
         .then(response => {
-            console.log(response.data);
+            console.log("Successful API call.");
             res.json(response.data).status(200);
         })
         .catch(error => {
-            console.error(error);
-            res.json(error).status(500);
+            console.log("Error occurred.");
+            res.json(error);
         });
 });
 
