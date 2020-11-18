@@ -44,8 +44,11 @@ $(document).ready(function () {
 			method: formData.method,
 			url: formData.endpoint,
 			data: formData.body,
-			username: formData.username,
-			password: formData.password
+			beforeSend: function (xhr) {
+				if (formData.username !== "" && formData.password !== "") {
+					xhr.setRequestHeader("Authorization", "Basic " + btoa(formData.username + ":" + formData.password));
+				}
+			}
 		})
 			.then(response => {
 				$("#output").val(JSON.stringify(response, null, "\t"))
