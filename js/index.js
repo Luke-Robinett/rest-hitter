@@ -4,19 +4,8 @@ $(document).ready(function () {
 
 	$("form").on("submit", event => {
 		event.preventDefault();
-		const action = $(event.target).attr("action");
-		const data = $(event.target).serialize();
-		$.post(action, data, "json")
-			.then(response => {
-				$("#output").val(JSON.stringify(response, null, "\t"))
-					.focus()
-					.scrollTop(0);
-				$("#output")[0].setSelectionRange(0, 0);
-			})
-			.catch(error => {
-				console.log(error);
-				alert("Something went wrong. Please check your entries and try again.");
-			});
+
+		submitForm(getFormData());
 	});
 
 	$("#save").on("click", function (event) {
@@ -49,6 +38,26 @@ $(document).ready(function () {
 	});
 
 	$("#session-name").on("change", event => UpdateTitle($(event.target).val()));
+
+	function submitForm(formData) {
+		$.ajax({
+			method: formData.method,
+			url: formData.endpoint,
+			data: formData.body,
+			username: formData.username,
+			password: formData.password
+		})
+			.then(response => {
+				$("#output").val(JSON.stringify(response, null, "\t"))
+					.focus()
+					.scrollTop(0);
+				$("#output")[0].setSelectionRange(0, 0);
+			})
+			.catch(error => {
+				console.log(error);
+				alert("Something went wrong. Please check your entries and try again.");
+			});
+	}
 
 	function UpdateTitle(newTitle) {
 		$(document).attr("title", `${newTitle} | Rest Hitter`);
