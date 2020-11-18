@@ -11,6 +11,7 @@ $(document).ready(function () {
 	$("#save").on("click", function (event) {
 		event.preventDefault();
 		saveSession(getFormData());
+		updateHistory();
 	});
 
 	$("#reset").on("click", function (event) {
