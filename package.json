@@ -17,11 +17,6 @@
     "url": "https://github.com/Luke-Robinett/rest-hitter/issues"
   },
   "homepage": "https://github.com/Luke-Robinett/rest-hitter#readme",
-  "dependencies": {
-    "axios": "^0.20.0",
-    "express": "^4.17.1"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.5"
-  }
+  "dependencies": {},
+  "devDependencies": {}
 }
